@@ -285,8 +285,9 @@ def dimensional_reduction(features, labels):
 	reduced_data = pca.transform(features)
 	f = plt.figure(figsize=(8, 8))
 	f.canvas.set_window_title('PCA of Tsunami Dataset')
-	plt.scatter(reduced_data[labels == 1, 0], reduced_data[labels == 1, 1], color='b', lw=2, label='Tsunami-genic')
-	plt.scatter(reduced_data[labels == 0, 0], reduced_data[labels == 0, 1], color='r', lw=2, label='Non Tsunami-genic')
+	pos = plt.scatter(reduced_data[labels == 1, 0], reduced_data[labels == 1, 1], color='b', lw=2)
+	neg = plt.scatter(reduced_data[labels == 0, 0], reduced_data[labels == 0, 1], color='r', lw=2)
+	plt.legend((pos, neg), ('Tsunami-genic', 'Non Tsunami-genic'))
 	plt.show()
 
 
