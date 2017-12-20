@@ -238,28 +238,20 @@ Created on Fri Dec 8 14:24:47 2017
 	3. Region of Occurrence such as Land(near ocean floor) or Ocean bed
 	4. Distance from the ocean bed if the epicenter is in land.
 
-Accuracy achieved so far with different Classification Algorithms:
+Accuracy achieved so far:
 
-Logistic Regression : 98.64
-Naive Bayes : 98.37
-Support Vector Machine with Linear Kernel : 98.1
+Linear Support Vector Classification : 99.32
 
 """
 
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-from sklearn.gaussian_process import GaussianProcessClassifier
-#from sklearn.ensemble import RandomForestClassifier
 from sklearn.decomposition import PCA
 from sklearn.externals import joblib
-from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import LinearSVC
-#from sklearn import tree
 from sklearn.metrics import accuracy_score
 import matplotlib.pyplot as plt
-#from pandas.plotting import scatter_matrix
 
 
 file_name = './model.pkl'
@@ -290,12 +282,11 @@ def dimensional_reduction(features, labels):
 	pca.fit(features)
 	first_component = pca.components_[0]
 	second_component = pca.components_[1]
-	print(pca.explained_variance_ratio_)
 	reduced_data = pca.transform(features)
-	print(first_component, second_component)
-	plt.figure(fig_size=(8, 8))
-	plt.scatter(reduced_data[labels == 1, 0], reduced_data[labels == 1, 1], color='b', label='Tsunami-genic')
-	plt.scatter(reduced_data[labels == 0, 0], reduced_data[labels == 0, 1], color='r', label='Non Tsunami-genic')
+	f = plt.figure(figsize=(8, 8))
+	f.canvas.set_window_title('PCA of Tsunami Dataset')
+	plt.scatter(reduced_data[labels == 1, 0], reduced_data[labels == 1, 1], color='b', lw=2, label='Tsunami-genic')
+	plt.scatter(reduced_data[labels == 0, 0], reduced_data[labels == 0, 1], color='r', lw=2, label='Non Tsunami-genic')
 	plt.show()
 
 
@@ -309,7 +300,6 @@ def split_dataset(X, y):
 
 def train_model(features, labels):
 	clf = LinearSVC(random_state=15)
-	#print(clf.random_state)
 	clf.fit(features, labels)
 	_ = joblib.dump(clf, file_name)
 
@@ -329,65 +319,8 @@ def predict_tsunami(features):
 	try:
 		clf = joblib.load(file_name)
 		pred = clf.predict(features)
-		return pred[0]
+		return True if pred[0] else False
 	except:
-		print('Please train the model...')
-
-
-labels =  ['magnitude', 'focal_depth', 'region', 'distance', 'class']
-df = pd.read_csv('../dataset/dataset_final_v5.csv', names=labels)
-dataset = df.as_matrix()
-
-# View relationship between featuers
-#features_relationship(df, dataset)
-
-# Split dataset
-X, y = target_feature_split(dataset)
-features_train, features_test, labels_train, labels_test = split_dataset(X, y)
-
-# Dimensional Reduction
-dimensional_reduction(X, y)
-
-# Training the model
-train_model(features_train, labels_train)
-
-# Testing the model
-pred = test_model(features_test)
-
-# Evaluating the model
-score = find_score(pred, labels_test)
-print('Score : {}'.format(round(score * 100, 2)))
-
-# Predicting new data
-print('Tsunami : {}'.format(predict_tsunami([[9.3, 33, 1, -250]])))
-
-labels =  ['magnitude', 'focal_depth', 'region', 'distance', 'class']
-df = pd.read_csv('../dataset/dataset_final_v5.csv', names=labels)
-dataset = df.as_matrix()
-
-# View relationship between featuers
-#features_relationship(df, dataset)
-
-# Split dataset
-X, y = target_feature_split(dataset)
-features_train, features_test, labels_train, labels_test = split_dataset(X, y)
-
-# Dimensional Reduction
-dimensional_reduction(X, y)
-
-# Training the model
-train_model(features_train, labels_train)
-
-# Testing the model
-pred = test_model(features_test)
-
-# Evaluating the model
-score = find_score(pred, labels_test)
-print('Score : {}'.format(round(score * 100, 2)))
-
-# Predicting new data
-print('Tsunami : {}'.format(predict_tsunami([[9.3, 33, 1, -250]])))
-
 		print('Please train the model...')
 
 
