@@ -3,18 +3,21 @@ import pandas as pd
 from search_distance import find_distance
 
 
-def generate_distance(input_file):
-	df = pd.read_csv('./{}'.format(input_file))
-	df['DISTANCE'] = pd.Series([0] * len(df.index), dtype=object)
-	for i in range(len(df.index)):
-		lat, lng = df['LATITUDE'][i], df['LONGITUDE'][i]
-		distance = find_distance(float(lat), float(lng), df['REGION'][i])
-		df['DISTANCE'][i] = distance
-	df.to_csv('./{}'.format(input_file))
+def generate_distance(input_file = None, lat = None, lng = None, region = None):
+	if input_file is not None:
+		df = pd.read_csv('./{}'.format(input_file))
+		df['DISTANCE'] = pd.Series([0] * len(df.index), dtype=object)
+		for i in range(len(df.index)):
+			lat, lng = df['LATITUDE'][i], df['LONGITUDE'][i]
+			distance = find_distance(float(lat), float(lng), df['REGION'][i])
+			df['DISTANCE'][i] = distance
+		df.to_csv('./{}'.format(input_file))
+	else:
+		return find_distance(float(lat), float(lng), region)
 
 
 input_file = sys.argv[1]
-generate_distance(input_file)
+generate_distance(input_file=input_file)
 
 
 

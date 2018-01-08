@@ -14,6 +14,8 @@ import random
 from nltk.stem.lancaster import LancasterStemmer
 
 
+PREDICT_FLAG = False
+
 # Creating a stemmer object.
 stemmer = LancasterStemmer()
 
@@ -206,26 +208,54 @@ def change_in_data(_sentences, _words):
 
 
 if __name__ == '__main__':
-
     # Preparing data.
     X, y = prepare_data()
     X = np.array(training)
     y = np.array(output)
+    predict_questions = ["Earthquake Magnitude (Richter scale [ 0 - 10 ])?", "Focal depth (Km)?", "Latitude of epicenter?", "Longitude of epicenter?"]
+    predict_answers = []
+    cur_ques = 1
 
     if(change_in_data(len(X), len(X[0]))):
         # Training the ANN.
         start_time = time.time()
         train(X, y, hidden_neurons=40, alpha=0.1, epochs=1000000)
         elapsed_time = time.time() - start_time
-        print ("Training time:", elapsed_time, "seconds")
+        print ("Training time: ", elapsed_time, "seconds")
 
     while True:
         # Classifying new sentence.
         _input = input('You: ')
-        class_ = classify(_input)[0][0]
-
-        for _class in training_data:
-            if _class["class"] == class_:
-                print("Bot: " + random.choice(_class["responses"]))
-                if _class["class"].strip() == 'goodbye':
-                    break
+        if PREDICT_FLAG:
+            if _input.lower() == 'yes':
+                while cur_ques <= 4:
+                    print("Bot: " + predict_questions[cur_ques - 1])
+                    _input = input('You: ')
+                    try:
+                        val = float(_input)
+                        if cur_ques == 1 and ( val < 0 or val > 10):
+                            raise ValueError()
+                        if cur_ques == 3 and ( val <= -90 or val >= 90 ):
+                            raise ValueError()
+                        if cur_ques == 4 and ( val <= -180 or val >= 180 ):
+                            raise ValueError()
+                        predict_answers.append(val)
+                        cur_ques += 1
+                    except ValueError:
+                        print("Bot: Please provide a valid input")
+                # Call to model goes here..
+                PREDICT_FLAG = False
+                cur_ques = 1
+                predict_answers.clear()
+            else:
+                print("Bot: Ok fine, feel free to ask me again.")
+                PREDICT_FLAG = False
+        else:
+            class_ = classify(_input)[0][0]
+            for _class in training_data:
+                if _class["class"] == class_:
+                    print("Bot: " + random.choice(_class["responses"]))
+                    if class_ == 'goodbye':
+                        break
+                    elif class_ == 'predict_tsunami':
+                        PREDICT_FLAG = True

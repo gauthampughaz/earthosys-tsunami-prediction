@@ -1,18 +1,35 @@
 {"data": [
         {
           "class": "greeting",
-          "sentences": ["How are you?", "How is your day?", "Good day", "Hi", "How is it going today?", "How it is going?"],
+          "sentences": ["How are you Jiffy?", "How are you?", "How is your day?", "Good day", "Hi", "Hi Jiffy", "How is it going today?", "How it is going?"],
           "responses": ["Hi pal, going good."]
         },
         {
           "class": "goodbye",
-          "sentences": ["Bye, have a nice day.", "See you later", "Bye, talk to you soon", "Catch you later"],
+          "sentences": ["Bye, have a nice day.", "See you later", "Bye, talk to you soon", "Catch you later", "Bye Jiffy"],
           "responses": ["Bye, have a great day ahead.."]
         },
         {
-          "class": "sandwich",
-          "sentences": ["Make me a sandwich", "Can you make a sandwich?", "Having a sandwich today?", "What's for lunch?"],
-          "responses": ["Yea, I will make a sandwich for you pal.."]
+          "class": "earthquake",
+          "sentences": ["What is earthquake?", "Define earthquake.", "What do you know about earthquake?", "Can you tell about earthquake?",
+                        "Can you provide information about earthquakes?"],
+          "responses": ["An earthquake (also known as a quake, tremor or temblor) is the shaking of the surface of the Earth, resulting from the sudden release of energy in the Earth's lithosphere that creates seismic waves."]
+        },
+        {
+          "class": "seismic_waves",
+          "sentences": ["What are seismic_waves?", "Define a seismic wave.", "What do you know about seismic waves?", "Can you tell about seismic waves?",
+                        "Can you provide information about seismic waves?"],
+          "responses": ["Seismic waves are the waves of energy caused by the sudden breaking of rock within the earth or an explosion. They are the energy that travels through the earth and is recorded on seismographs."]
+        },
+        {
+          "class": "about_me",
+          "sentences": ["Who are you?", "What's your name?", "Your name, please..", "How can I call you?", "How should I call you?"],
+          "responses": ["I'm Jiffy the chatbot."]
+        },
+        {
+          "class": "predict_tsunami",
+          "sentences": ["Can you predict tsunami?", "Do you have the ability to predict tsunami?", "Will you predict tsunami?", "Predict tsunami?"],
+          "responses": ["Ofcourse I can, if you provide me some earthquake characteristic details. Can you provide me those information, [Yes/No]"]
         }
    ]
 }
