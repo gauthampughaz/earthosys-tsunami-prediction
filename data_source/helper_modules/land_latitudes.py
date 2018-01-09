@@ -2,7 +2,7 @@ import os
 
 file_path = '../dist2coast.signed.txt'
 
-with open(file_path, 'r') as in_f: 
+with open(file_path, 'r') as in_f:
     lat = int(list(map(float, in_f.readline().split('\t')))[1])
     out_f = open('../land_latitudes/{}.csv'.format(lat), 'w')
     out_f.write('LNG\tLAT\tDISTANCE\n')

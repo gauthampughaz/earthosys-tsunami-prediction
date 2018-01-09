@@ -1,18 +1,23 @@
 import sys
 import pandas as pd
-from .search_distance import find_distance
+from .region_generator import generate_region
+from .distance_generator import generate_distance
 
 
-def generate_distance(df = None, lat = None, lng = None, region = None):
-	if df is not None:
-		df['DISTANCE'] = pd.Series([0] * len(df.index), dtype=object)
-		for i in range(len(df.index)):
-			lat, lng = df['LATITUDE'][i], df['LONGITUDE'][i]
-			distance = find_distance(float(lat), float(lng), df['REGION'][i])
-			df['DISTANCE'][i] = distance
-		return df
-	else:
-		return find_distance(float(lat), float(lng), region)
+def process_data(input_file = None, input_data = None):
+    if input_file is not None:
+        df = pd.read_csv('./{}'.format(input_file))
+        df = generate_region(df=df)
+        df = generate_distance(df=df)
+        df.drop('LATITUDE', axis=1, inplace=True)
+        df.drop('LONGITUDE', axis=1, inplace=True)
+        df.to_csv('./{}'.format(input_file))
+    else:
+        output_data = [input_data[0], input_data[1]]
+        region = generate_region(lat=input_data[2], lng=input_data[3])
+        output_data.append(region)
+        output_data.append(generate_distance(lat=input_data[2], lng=input_data[3], region=region))
+        return output_data
 
 
 

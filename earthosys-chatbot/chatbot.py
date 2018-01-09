@@ -4,6 +4,9 @@
 
 """
 
+import sys
+sys.path.insert(0, '/home/gautham/earthosys/data_source/')
+sys.path.insert(0, '/home/gautham/earthosys/earthosys-model/')
 import nltk
 import os
 import json
@@ -11,6 +14,8 @@ import datetime
 import numpy as np
 import time
 import random
+from helper_modules.data_processor import process_data
+from model.tsunami_predictor import predict_tsunami
 from nltk.stem.lancaster import LancasterStemmer
 
 
@@ -244,6 +249,12 @@ if __name__ == '__main__':
                     except ValueError:
                         print("Bot: Please provide a valid input")
                 # Call to model goes here..
+                input_data = process_data(input_data=predict_answers)
+                tsunami = predict_tsunami([input_data])
+                if tsunami:
+                    print("Bot: Yes, this earthquake has the potential to cause Tsunami.")
+                else:
+                    print("Bot: No, this earthquake does not possess the potential to cause Tsunami.")
                 PREDICT_FLAG = False
                 cur_ques = 1
                 predict_answers.clear()
