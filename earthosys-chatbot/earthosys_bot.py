@@ -14,12 +14,14 @@ import datetime
 import numpy as np
 import time
 import random
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 from helper_modules.data_processor import process_data
 from model.tsunami_predictor import predict_tsunami
 from nltk.stem.lancaster import LancasterStemmer
 
 
 PREDICT_FLAG = False
+IN_FLAG = False
 
 # Creating a stemmer object.
 stemmer = LancasterStemmer()
@@ -27,10 +29,13 @@ stemmer = LancasterStemmer()
 classes, words, documents = [], [], []
 ignore_words = ['?', ',', '.']
 training, output, training_data = [], [], []
+predict_questions = ["Earthquake Magnitude (Richter scale [ 0 - 10 ])?", "Focal depth (Km)?", "Latitude of epicenter?", "Longitude of epicenter?"]
+predict_answers = []
+cur_ques = 1
 
 
 # Loading training data.
-with open('data.json') as data:
+with open('/home/gautham/earthosys/earthosys-chatbot/data.json') as data:
     training_data = json.load(data)['data']
 
 
@@ -117,7 +122,7 @@ def train(X, y, hidden_neurons=30, alpha=0.01, epochs=1000000):
                'words': words,
                'classes': classes
               }
-    synapse_file = "synapses.json"
+    synapse_file = "/home/gautham/earthosys/earthosys-chatbot/synapses.json"
 
     with open(synapse_file, 'w') as outfile:
         json.dump(synapse, outfile, indent=4, sort_keys=True)
@@ -174,7 +179,7 @@ def bag_of_words(sentence, words):
 
 def predict(sentence):
     # Loading the calculated synapse values.
-    synapse_file = 'synapses.json'
+    synapse_file = '/home/gautham/earthosys/earthosys-chatbot/synapses.json'
     with open(synapse_file) as data_file:
         synapse = json.load(data_file)
         synapse_0 = np.asarray(synapse['synapse0'])
@@ -196,7 +201,7 @@ def classify(sentence):
 
     results = [[i,r] for i,r in enumerate(results) if r > ERROR_THRESHOLD ]
     results.sort(key=lambda x: x[1], reverse=True)
-    return_results =[[classes[r[0]],r[1]] for r in results]
+    return_results = [[classes[r[0]],r[1]] for r in results]
     #print("Sentence: {}, Classification: {}".format(sentence, return_results))
     return return_results
 
@@ -212,14 +217,61 @@ def change_in_data(_sentences, _words):
         return True
 
 
+def bot_response(_input):
+    global predict_questions, predict_answers, cur_ques, PREDICT_FLAG, IN_FLAG
+    if PREDICT_FLAG:
+        if _input.lower() == 'yes' or IN_FLAG:
+            IN_FLAG = True
+            if cur_ques <= 5:
+                try:
+                    if cur_ques == 1:
+                        cur_ques += 1
+                        return predict_questions[cur_ques - 2]
+                    elif cur_ques == 5:
+                        val = float(_input)
+                        if val <= -180 or val >= 180:
+                            raise ValueError()
+                        predict_answers.append(val)
+                    else:
+                        val = float(_input)
+                        if cur_ques == 2 and ( val < 0 or val > 10 ):
+                            raise ValueError()
+                        if cur_ques == 4 and ( val <= -90 or val >= 90 ):
+                            raise ValueError()
+                        cur_ques += 1
+                        predict_answers.append(val)
+                        return predict_questions[cur_ques - 2]
+                except ValueError:
+                    return "Oops.. that was an invalid input. " + predict_questions[cur_ques - 2]
+            input_data = process_data(input_data=predict_answers)
+            tsunami = predict_tsunami([input_data])
+            PREDICT_FLAG = False
+            IN_FLAG = False
+            cur_ques = 1
+            predict_answers.clear()
+            if tsunami:
+                return "Yes, this earthquake has the potential to cause Tsunami."
+            else:
+                return "No, this earthquake does not possess the potential to cause Tsunami."
+        else:
+            PREDICT_FLAG = False
+            return "Ok fine, feel free to ask me again."
+
+    else:
+        class_ = classify(_input)[0][0]
+        for _class in training_data:
+            if _class["class"] == class_:
+                if class_ == 'predict_tsunami':
+                    PREDICT_FLAG = True
+                    return random.choice(_class["responses"])
+                else:
+                    return random.choice(_class["responses"])
+
 if __name__ == '__main__':
     # Preparing data.
     X, y = prepare_data()
     X = np.array(training)
     y = np.array(output)
-    predict_questions = ["Earthquake Magnitude (Richter scale [ 0 - 10 ])?", "Focal depth (Km)?", "Latitude of epicenter?", "Longitude of epicenter?"]
-    predict_answers = []
-    cur_ques = 1
 
     if(change_in_data(len(X), len(X[0]))):
         # Training the ANN.
