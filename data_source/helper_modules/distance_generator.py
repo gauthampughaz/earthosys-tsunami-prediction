@@ -1,6 +1,7 @@
 import sys
 import pandas as pd
-from .search_distance import find_distance
+sys.path.append('/home/gautham/earthosys/data_source/helper_modules/')
+from search_distance import find_distance
 
 
 def generate_distance(df = None, lat = None, lng = None, region = None):
@@ -8,12 +9,16 @@ def generate_distance(df = None, lat = None, lng = None, region = None):
 		df['DISTANCE'] = pd.Series([0] * len(df.index), dtype=object)
 		for i in range(len(df.index)):
 			lat, lng = df['LATITUDE'][i], df['LONGITUDE'][i]
-			distance = find_distance(float(lat), float(lng), df['REGION'][i])
-			df['DISTANCE'][i] = distance
+			if region == 1:
+				df['DISTANCE'][i] = find_distance(float(lat), float(lng), df['REGION'][i])
+			else:
+				df['DISTANCE'][i] = 0
 		return df
 	else:
-		return find_distance(float(lat), float(lng), region)
-
+		if region == 1:
+			return find_distance(float(lat), float(lng), region)
+		else:
+			return 0
 
 
 

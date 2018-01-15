@@ -104,20 +104,20 @@ def predict_tsunami(features):
 		print(e)
 		print('Please train the model...')
 
-def main():
+if __name__ == '__main__':
 	labels =  ['magnitude', 'focal_depth', 'region', 'distance', 'class']
-	df = pd.read_csv('/home/gautham/earthosys/earthosys-model/dataset/dataset_final_v5.csv', names=labels)
+	df = pd.read_csv('/home/gautham/earthosys/earthosys-model/dataset/dataset_final_v7.csv', names=labels)
 	dataset = df.as_matrix()
 
 	# View relationship between featuers
-	features_relationship(df, dataset)
+	#features_relationship(df, dataset)
 
 	# Split dataset
 	X, y = target_feature_split(dataset)
 	features_train, features_test, labels_train, labels_test = split_dataset(X, y)
 
 	# Dimensional Reduction
-	dimensional_reduction(X, y)
+	#dimensional_reduction(X, y)
 
 	# Training the model
 	train_model(features_train, labels_train)
@@ -130,4 +130,4 @@ def main():
 	print('Score : {}'.format(round(score * 100, 2)))
 
 	# Predicting new data
-	print('Tsunami : {}'.format(predict_tsunami([[9.3, 33, 1, -250]])))
+	print('Tsunami : {}'.format(predict_tsunami([[9, 30, 1, -230]])))

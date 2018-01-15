@@ -1,7 +1,8 @@
 import sys
 import pandas as pd
-from .region_generator import generate_region
-from .distance_generator import generate_distance
+sys.path.append('/home/gautham/earthosys/data_source/helper_modules/')
+from region_generator import generate_region
+from distance_generator import generate_distance
 
 
 def process_data(input_file = None, input_data = None):

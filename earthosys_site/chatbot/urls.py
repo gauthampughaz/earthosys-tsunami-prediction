@@ -4,5 +4,5 @@ from . import views
 app_name = 'bot'
 
 urlpatterns = [
-    url(r'^', views.response, name='bot')
+    url(r'^', views.BotResponse.as_view(), name='bot')
 ]
