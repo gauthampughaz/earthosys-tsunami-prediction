@@ -29,6 +29,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.decomposition import PCA
 from sklearn.externals import joblib
 from sklearn.svm import LinearSVC
+from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import accuracy_score
 import matplotlib.pyplot as plt
 
@@ -75,7 +79,7 @@ def target_feature_split(dataset):
 
 
 def split_dataset(X, y):
-	return train_test_split(X, y, test_size=0.30, random_state=28)
+	return train_test_split(X, y, test_size=0.10, random_state=63)
 
 
 def train_model(features, labels):
@@ -114,6 +118,7 @@ if __name__ == '__main__':
 
 	# Split dataset
 	X, y = target_feature_split(dataset)
+	#for i in range(1, 101):
 	features_train, features_test, labels_train, labels_test = split_dataset(X, y)
 
 	# Dimensional Reduction
@@ -130,4 +135,11 @@ if __name__ == '__main__':
 	print('Score : {}'.format(round(score * 100, 2)))
 
 	# Predicting new data
-	print('Tsunami : {}'.format(predict_tsunami([[9, 30, 1, -230]])))
+	#if not predict_tsunami([[4.0, 30, 0, 0]]):
+		#print('State:' + str(i))
+	print('Tsunami [9, 30, 1, -150]: {}'.format(predict_tsunami([[9, 30, 1, -150]])))
+	print('Tsunami [9, 30, 1, -200]: {}'.format(predict_tsunami([[9, 30, 1, -180]])))
+	print('Tsunami [9, 30, 1, -250]: {}'.format(predict_tsunami([[9, 30, 1, -350]])))
+	print('Tsunami [4.3, 30, 0, 0]: {}'.format(predict_tsunami([[4.1, 1, 0, 0]])))
+	print('Tsunami [6.1, 100, 0, 0]: {}'.format(predict_tsunami([[6.1, 100, 0, 0]])))
+	print('Tsunami [9, 180, 0, 0]: {}'.format(predict_tsunami([[9, 200, 0, 0]])))
