@@ -10,9 +10,6 @@ from django.views.decorators.csrf import csrf_exempt
 @method_decorator(csrf_exempt, name='dispatch')
 class HomeView(View):
     def get(self, request):
-        pass
-
-    def post(self, request):
         feeds, records, counter = {}, {}, 0
         predicted_feeds = FeedPrediction.objects.all().order_by('-id').values()[:5]
         for feed in predicted_feeds:

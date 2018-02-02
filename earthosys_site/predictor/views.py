@@ -14,6 +14,7 @@ class PredictTsunamiView(View):
     template_name = '# template name goes here'
 
     def post(self, request):
+        print("reached")
         form = self.form_class(request.POST)
         if form.is_valid():
             record = PredictorRecord()
