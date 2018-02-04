@@ -20,4 +20,5 @@ class HomeView(View):
         for record in predictor_records:
             records[counter] = record
             counter += 1
+        print(request.COOKIES)
         return JsonResponse({'feeds': feeds, 'records': records})
