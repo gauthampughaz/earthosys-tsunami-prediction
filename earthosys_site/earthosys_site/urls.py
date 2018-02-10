@@ -17,8 +17,8 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^feeds/', include('home.urls')),
+    url(r'^api/feeds/', include('feeds.urls')),
     url(r'^admin/', admin.site.urls),
-    url(r'^chatbot/', include('chatbot.urls')),
-    url(r'^predictor/', include('predictor.urls'))
+    url(r'^api/chatbot/', include('chatbot.urls')),
+    url(r'^api/predictor/', include('predictor.urls'))
 ]

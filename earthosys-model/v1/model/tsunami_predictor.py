@@ -19,7 +19,7 @@ Created on Fri Dec 8 14:24:47 2017
 
 Accuracy achieved so far:
 
-Linear Support Vector Classification : 97.49
+Linear Support Vector Classification : 99.32
 
 """
 
@@ -30,7 +30,7 @@ from sklearn.decomposition import PCA
 from sklearn.externals import joblib
 from sklearn.svm import LinearSVC
 from sklearn.svm import SVC
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import accuracy_score
@@ -79,12 +79,11 @@ def target_feature_split(dataset):
 
 
 def split_dataset(X, y):
-	return train_test_split(X, y, test_size=0.25, random_state=50)
+	return train_test_split(X, y, test_size=0.10, random_state=63)
 
 
 def train_model(features, labels):
-	clf = RandomForestClassifier(n_estimators=5, random_state=1)
-	#clf = LinearSVC(random_state=28)
+	clf = LinearSVC(random_state=15)
 	clf.fit(features, labels)
 	_ = joblib.dump(clf, file_name)
 
@@ -119,10 +118,11 @@ if __name__ == '__main__':
 
 	# Split dataset
 	X, y = target_feature_split(dataset)
+	#for i in range(1, 101):
 	features_train, features_test, labels_train, labels_test = split_dataset(X, y)
 
 	# Dimensional Reduction
-	dimensional_reduction(X, y)
+	#dimensional_reduction(X, y)
 
 	# Training the model
 	train_model(features_train, labels_train)
@@ -132,4 +132,14 @@ if __name__ == '__main__':
 
 	# Evaluating the model
 	score = find_score(pred, labels_test)
-	print('Score : {}'.format(round(score * 100, 2)))	
+	print('Score : {}'.format(round(score * 100, 2)))
+
+	# Predicting new data
+	#if not predict_tsunami([[4.0, 30, 0, 0]]):
+		#print('State:' + str(i))
+	print('Tsunami [9, 30, 1, -150]: {}'.format(predict_tsunami([[9, 30, 1, -150]])))
+	print('Tsunami [9, 30, 1, -200]: {}'.format(predict_tsunami([[9, 30, 1, -180]])))
+	print('Tsunami [9, 30, 1, -250]: {}'.format(predict_tsunami([[9, 30, 1, -350]])))
+	print('Tsunami [4.3, 30, 0, 0]: {}'.format(predict_tsunami([[4.1, 1, 0, 0]])))
+	print('Tsunami [6.1, 100, 0, 0]: {}'.format(predict_tsunami([[6.1, 100, 0, 0]])))
+	print('Tsunami [9, 180, 0, 0]: {}'.format(predict_tsunami([[9, 200, 0, 0]])))

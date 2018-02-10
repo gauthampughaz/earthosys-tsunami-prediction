@@ -1,0 +1,3 @@
+[submodule "earthosys_site/EARTHOSYS"]
+	path = earthosys_site/EARTHOSYS
+	url = https://github.com/E-DineshKumar/EARTHOSYS.git

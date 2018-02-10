@@ -24,9 +24,7 @@ class PredictTsunamiView(View):
             record.depth = data["depth"]
             record.latitude = data["latitude"]
             record.longitude = data['longitude']
-
             _input = process_data(input_data=[data["magnitude"], data["depth"], data["latitude"], data["longitude"]])
-            print(_input)
             record.tsunami = predict_tsunami([_input])
             record.save()
             if record.tsunami:

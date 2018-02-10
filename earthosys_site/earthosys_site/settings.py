@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'chatbot.apps.ChatbotConfig',
     'predictor.apps.PredictorConfig',
-    'home.apps.HomeConfig',
+    'feeds.apps.FeedsConfig',
     'corsheaders'
 ]
 
