@@ -19,7 +19,7 @@ Created on Fri Dec 8 14:24:47 2017
 
 Accuracy achieved so far:
 
-Linear Support Vector Classification : 97.49
+Random Forest Classifier : 97.49
 
 """
 
@@ -29,11 +29,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.decomposition import PCA
 from sklearn.externals import joblib
 from sklearn.svm import LinearSVC
-from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import classification_report
 import matplotlib.pyplot as plt
 
 
@@ -84,7 +83,6 @@ def split_dataset(X, y):
 
 def train_model(features, labels):
 	clf = RandomForestClassifier(n_estimators=5, random_state=1)
-	#clf = LinearSVC(random_state=28)
 	clf.fit(features, labels)
 	_ = joblib.dump(clf, file_name)
 
@@ -106,8 +104,8 @@ def predict_tsunami(features):
 		pred = clf.predict(features)
 		return True if pred[0] else False
 	except Exception as e:
-		print(e)
-		print('Please train the model...')
+		print('Please train the model...')s
+
 
 if __name__ == '__main__':
 	labels =  ['magnitude', 'focal_depth', 'region', 'distance', 'class']
@@ -132,4 +130,12 @@ if __name__ == '__main__':
 
 	# Evaluating the model
 	score = find_score(pred, labels_test)
-	print('Score : {}'.format(round(score * 100, 2)))	
+
+	# Confusion matrix
+	print(confusion_matrix(labels_test, pred))
+
+	# Classification report
+	print(classification_report(labels_test, pred, target_names=['class 0', 'class 1']))
+
+	# Score
+	print('Score : {}'.format(round(score * 100, 2)))
