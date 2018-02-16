@@ -17,8 +17,8 @@ ChatBot:
 
 Send POST request whenever user sends a message.
 
-Input: {'input': USER SENTENCE}n
-Output: {'response': CHATBOT RESPONSE}
+Input: {'input': USER SENTENCE}
+Output: {'status': 'success' or 'error','response': CHATBOT RESPONSE}
 
 
 Predictor:

@@ -12,7 +12,13 @@ from django.views.decorators.csrf import csrf_exempt
 class BotResponse(View):
     def post(self, request):
         data = json.loads(request.body.decode('utf-8'))
-        _response = bot_response(data['input'])
-        return JsonResponse({'response': _response})
+        if not data['input']:
+            return JsonResponse({'status': 'success', 'response': "Please enter a valid input."})
+        try:
+            _response = bot_response(data['input'])
+            return JsonResponse({'status': 'success', 'response': _response})
+        except Exception as e:
+            print(e)
+            return JsonResponse({'status': 'error', 'response': "Please try again."})
 
 
