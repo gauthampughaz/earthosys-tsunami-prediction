@@ -21,4 +21,3 @@ class BotResponse(View):
             print(e)
             return JsonResponse({'status': 'error', 'response': "Please try again."})
 
-

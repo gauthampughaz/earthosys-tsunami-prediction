@@ -2,11 +2,15 @@ certifi==2017.11.5
 chardet==3.0.4
 cycler==0.10.0
 Django==1.11.8
+django-angular==2.0.0
+django-cors-headers==2.1.0
+djangorestframework==3.7.7
 idna==2.6
 matplotlib==2.1.1
 nltk==3.2.5
 numpy==1.14.0
 pandas==0.22.0
+Pygments==2.2.0
 pyparsing==2.2.0
 python-dateutil==2.6.1
 pytz==2017.3

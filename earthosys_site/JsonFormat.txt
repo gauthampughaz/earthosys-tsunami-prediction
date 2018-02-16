@@ -1,30 +1,23 @@
 Home:
 
 Every two mins send an ajax GET request and update it in home page asynchronously.
-
+URL: http://localhost:8000/api/feeds/
 Input: Nothing
-Output: {
-// Predicted based on live feed.
-"feeds": {"0": {"id": 39, "magnitude": 4.2, "depth": 85.48, "latitude": 23.9888, "longitude": 94.7021, "epicenter": 1, "date_time": "2018-01-21T14:33:59.363Z", "tsunami": false}, "1": {"id": 38, "magnitude": 4.2, "depth": 218.06, "latitude": -24.1167, "longitude": -67.0996, "epicenter": 1, "date_time": "2018-01-21T14:33:58.792Z", "tsunami": false}, "2": {"id": 37, "magnitude": 5.3, "depth": 10.0, "latitude": -28.9232, "longitude": -72.0229, "epicenter": 0, "date_time": "2018-01-21T14:33:58.180Z", "tsunami": true}},
-
-// Predicted based on user form data and chatbot.
-"records": {"0": {"id": 15, "magnitude": 3.9, "depth": 30.0, "latitude": 3.43, "longitude": 90.43, "date": "2018-01-15T10:14:43.384Z", "tsunami": false}, "1": {"id": 14, "magnitude": 4.0, "depth": 30.0, "latitude": 3.43, "longitude": 90.43, "date": "2018-01-15T10:14:35.771Z", "tsunami": true}, "2": {"id": 13, "magnitude": 4.1, "depth": 30.0, "latitude": 3.43, "longitude": 90.43, "date": "2018-01-15T10:14:17.888Z", "tsunami": true}}
-
-}
+Output: see browser console.
 
 
 ChatBot:
 
 Send POST request whenever user sends a message.
-
+URL: http://localhost:8000/api/chatbot/
 Input: {'input': USER SENTENCE}
-Output: {'status': 'success' or 'error','response': CHATBOT RESPONSE}
+Output: {'status': 'success' or 'error', 'response': CHATBOT RESPONSE}
 
 
 Predictor:
 
 Send POST request with form data not in JSON format.
-
+URL: http://localhost:8000/api/predictor/
 Input: Form data and names in input tags of form [magnitude, depth, latitude, longitude]
 Output: {'result': 'True', 'description': 'This is a tsunamigenic earthquake.'}
 					OR

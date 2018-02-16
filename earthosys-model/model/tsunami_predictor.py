@@ -104,7 +104,7 @@ def predict_tsunami(features):
 		pred = clf.predict(features)
 		return True if pred[0] else False
 	except Exception as e:
-		print('Please train the model...')s
+		print('Please train the model...')
 
 
 if __name__ == '__main__':

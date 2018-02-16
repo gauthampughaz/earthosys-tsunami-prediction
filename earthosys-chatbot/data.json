@@ -1,7 +1,7 @@
 {"data": [
         {
           "class": "greeting",
-          "sentences": ["How are you Jiffy?", "How are you?", "How is your day?", "Good day", "Hi", "Hi Jiffy", "How is it going today?", "How it is going?"],
+          "sentences": ["How are you Jiffy?", "How are you?", "How is your day?", "Good day", "Hi", "Hi Jiffy", "How is it going today?", "How it is going?", "Hii", "Hey"],
           "responses": ["Hi pal, going good."]
         },
         {
