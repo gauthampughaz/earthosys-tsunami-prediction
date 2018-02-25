@@ -7,7 +7,7 @@
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../data_source/")
-sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../earthosys-model/")
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../earthosys_model/")
 import nltk
 import json
 import datetime

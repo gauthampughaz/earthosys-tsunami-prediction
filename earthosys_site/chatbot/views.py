@@ -3,9 +3,8 @@ from django.views import View
 import json
 import sys
 import os
-sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../../earthosys-chatbot/")
-print(sys.path)
-from earthosys_bot import bot_response
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../../earthosys_chatbot/")
+from earthosys_chatbot import bot_response
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 

@@ -8,7 +8,7 @@ import sys
 import json
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../../data_source/helper_modules/")
-sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../../earthosys-model/model/")
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../../earthosys_model/model/")
 from data_processor import process_data
 from tsunami_predictor import predict_tsunami
 
