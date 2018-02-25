@@ -1,4 +1,5 @@
 import sys
+import os
 import pandas as pd
 import numpy as np
 
@@ -27,9 +28,9 @@ def find_longitude(dataset, lng):
 
 def find_distance(lat, lng, reg):
 	if int(reg) == 1:
-		df = pd.read_csv('/home/gautham/earthosys/data_source/land_latitudes/{}.csv'.format(int(lat)), sep='\t')
+		df = pd.read_csv(os.path.dirname(os.path.abspath(__file__)) + "/../land_latitudes/{}.csv".format(int(lat)), sep='\t')
 	elif int(reg) == 0:
-		df = pd.read_csv('/home/gautham/earthosys/data_source/sea_latitudes/{}.csv'.format(int(lat)), sep='\t')
+		df = pd.read_csv(os.path.dirname(os.path.abspath(__file__)) + "/../sea_latitudes/{}.csv".format(int(lat)), sep='\t')
 	dataset = df.as_matrix()
 	lat = find_latitude(dataset, lat)
 	dataset = dataset[dataset[:, 1] == lat]

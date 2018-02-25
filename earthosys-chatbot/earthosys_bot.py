@@ -5,10 +5,10 @@
 """
 
 import sys
-sys.path.insert(0, '/home/gautham/earthosys/data_source/')
-sys.path.insert(0, '/home/gautham/earthosys/earthosys-model/')
-import nltk
 import os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../data_source/")
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../earthosys-model/")
+import nltk
 import json
 import datetime
 import numpy as np
@@ -35,7 +35,7 @@ cur_ques = 1
 
 
 # Loading training data.
-with open('/home/gautham/earthosys/earthosys-chatbot/data.json') as data:
+with open(os.path.dirname(os.path.abspath(__file__)) + "/data.json") as data:
     training_data = json.load(data)['data']
 
 
@@ -122,7 +122,7 @@ def train(X, y, hidden_neurons=30, alpha=0.01, epochs=1000000):
                'words': words,
                'classes': classes
               }
-    synapse_file = "/home/gautham/earthosys/earthosys-chatbot/synapses.json"
+    synapse_file = os.path.dirname(os.path.abspath(__file__)) + "/synapses.json"
 
     with open(synapse_file, 'w') as outfile:
         json.dump(synapse, outfile, indent=4, sort_keys=True)
@@ -179,7 +179,7 @@ def bag_of_words(sentence, words):
 
 def predict(sentence):
     # Loading the calculated synapse values.
-    synapse_file = '/home/gautham/earthosys/earthosys-chatbot/synapses.json'
+    synapse_file = os.path.dirname(os.path.abspath(__file__)) + "/synapses.json"
     with open(synapse_file) as data_file:
         synapse = json.load(data_file)
         synapse_0 = np.asarray(synapse['synapse0'])

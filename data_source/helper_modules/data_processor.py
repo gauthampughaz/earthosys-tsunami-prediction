@@ -1,6 +1,7 @@
 import sys
+import os
 import pandas as pd
-sys.path.append('/home/gautham/earthosys/data_source/helper_modules/')
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from region_generator import generate_region
 from distance_generator import generate_distance
 

@@ -6,8 +6,9 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 import sys
 import json
-sys.path.insert(0, '/home/gautham/earthosys/data_source/helper_modules/')
-sys.path.insert(0, '/home/gautham/earthosys/earthosys-model/model/')
+import os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../../data_source/helper_modules/")
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../../earthosys-model/model/")
 from data_processor import process_data
 from tsunami_predictor import predict_tsunami
 

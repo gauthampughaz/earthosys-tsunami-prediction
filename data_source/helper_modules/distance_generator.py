@@ -1,6 +1,7 @@
 import sys
 import pandas as pd
-sys.path.append('/home/gautham/earthosys/data_source/helper_modules/')
+import os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from search_distance import find_distance
 
 

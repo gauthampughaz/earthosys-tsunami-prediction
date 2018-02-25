@@ -1,12 +1,13 @@
 from quakefeeds import QuakeFeed
 from data_processor import process_data
 from datetime import datetime
+import os
 import sys
 import sqlite3
-sys.path.insert(0, '/home/gautham/earthosys/earthosys-model/')
+sys.path.append(os.path.dirname(os.path.abspath(__file__) + "../../earthosys-model"))
 from model.tsunami_predictor import predict_tsunami
 
-db_file = '/home/gautham/earthosys/earthosys_site/db.sqlite3'
+db_file = os.path.dirname(os.path.abspath(__file__) + "../../earthosys_site/db.sqlite3"
 
 
 def get_feeds():

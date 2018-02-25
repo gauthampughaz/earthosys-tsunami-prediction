@@ -2,7 +2,9 @@ from django.http import JsonResponse
 from django.views import View
 import json
 import sys
-sys.path.append('/home/gautham/earthosys/earthosys-chatbot/')
+import os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../../earthosys-chatbot/")
+print(sys.path)
 from earthosys_bot import bot_response
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -20,4 +22,3 @@ class BotResponse(View):
         except Exception as e:
             print(e)
             return JsonResponse({'status': 'error', 'response': "Please try again."})
-

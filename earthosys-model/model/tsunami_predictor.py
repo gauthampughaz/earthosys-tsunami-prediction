@@ -25,6 +25,7 @@ Random Forest Classifier : 97.49
 
 import pandas as pd
 import numpy as np
+import os
 from sklearn.model_selection import train_test_split
 from sklearn.decomposition import PCA
 from sklearn.externals import joblib
@@ -36,7 +37,7 @@ from sklearn.metrics import classification_report
 import matplotlib.pyplot as plt
 
 
-file_name = '/home/gautham/earthosys/earthosys-model/model/model.pkl'
+file_name = os.path.dirname(os.path.abspath(__file__)) + "/model.pkl"
 
 
 def features_relationship(df, array):
@@ -109,7 +110,7 @@ def predict_tsunami(features):
 
 if __name__ == '__main__':
 	labels =  ['magnitude', 'focal_depth', 'region', 'distance', 'class']
-	df = pd.read_csv('/home/gautham/earthosys/earthosys-model/dataset/dataset_final_v7.csv', names=labels)
+	df = pd.read_csv(os.path.dirname(os.path.abspath(__file__)) + "../dataset/dataset_final_v7.csv", names=labels)
 	dataset = df.as_matrix()
 
 	# View relationship between featuers
