@@ -198,11 +198,10 @@ def predict(sentence):
 def classify(sentence):
     ERROR_THRESHOLD = 0.25
     results, classes = predict(sentence)
-
     results = [[i,r] for i,r in enumerate(results) if r > ERROR_THRESHOLD ]
     results.sort(key=lambda x: x[1], reverse=True)
     return_results = [[classes[r[0]],r[1]] for r in results]
-    #print("Sentence: {}, Classification: {}".format(sentence, return_results))
+    #print("Sentence: {}, Classification: {}".format(sentence, return_results))s
     return return_results
 
 
@@ -258,14 +257,18 @@ def bot_response(_input):
             return "Ok fine, feel free to ask me again."
 
     else:
-        class_ = classify(_input)[0][0]
-        for _class in training_data:
-            if _class["class"] == class_:
-                if class_ == 'predict_tsunami':
-                    PREDICT_FLAG = True
-                    return random.choice(_class["responses"])
-                else:
-                    return random.choice(_class["responses"])
+        class_ = classify(_input)
+        if len(class_) > 0:
+            class_ = class_[0][0]
+            for _class in training_data:
+                if _class["class"] == class_:
+                    if class_ == 'predict_tsunami':
+                        PREDICT_FLAG = True
+                        return random.choice(_class["responses"])
+                    else:
+                        return random.choice(_class["responses"])
+        else:
+            return "OOps that was out of my knowledge. Ask me questions like What is Tsunami? What are Sesimic waves?"
 
 if __name__ == '__main__':
     # Preparing data.

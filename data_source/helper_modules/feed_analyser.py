@@ -4,10 +4,10 @@ from datetime import datetime
 import os
 import sys
 import sqlite3
-sys.path.append(os.path.dirname(os.path.abspath(__file__) + "../../earthosys-model"))
-from model.tsunami_predictor import predict_tsunami
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../../earthosys_model/model")
+from tsunami_predictor import predict_tsunami
 
-db_file = os.path.dirname(os.path.abspath(__file__) + "../../earthosys_site/db.sqlite3"
+db_file = os.path.dirname(os.path.abspath(__file__)) + "/../../earthosys_site/db.sqlite3"
 
 
 def get_feeds():
@@ -45,7 +45,7 @@ def predict(data):
 
 def log_data(data, region, tsunami):
     print(data, region, tsunami)
-    sql = ''' INSERT INTO home_feedprediction(magnitude, depth, latitude, longitude, epicenter, date_time, tsunami) VALUES(?, ?, ?, ?, ?, ?, ?) '''
+    sql = ''' INSERT INTO feeds_feedprediction(magnitude, depth, latitude, longitude, epicenter, date_time, tsunami) VALUES(?, ?, ?, ?, ?, ?, ?) '''
     connection = create_connection()
     cursor = connection.cursor()
     cursor.execute(sql, data + [region, datetime.now(), tsunami])
@@ -63,5 +63,5 @@ def create_connection():
         connection = None
     return connection
 
-
-get_feeds()
+if __name__ == "__main__":
+    get_feeds()
