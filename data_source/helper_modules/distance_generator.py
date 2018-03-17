@@ -17,11 +17,13 @@ def generate_distance(df = None, lat = None, lng = None, region = None):
 		return df
 	else:
 		if region == 1:
-			return find_distance(float(lat), float(lng), region)
+			return generate_distance_util(float(lat), float(lng), region)
 		else:
 			return 0
 
 
+def generate_distance_util(lat, lng, region):
+	return find_distance(lat, lng, region)
 
 
 

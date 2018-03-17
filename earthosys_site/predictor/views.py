@@ -10,6 +10,7 @@ import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../../data_source/helper_modules/")
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../../earthosys_model/model/")
 from data_processor import process_data
+from data_processor import get_additional_info
 from tsunami_predictor import predict_tsunami
 
 
@@ -27,6 +28,12 @@ class PredictTsunamiView(View):
             record.longitude = data['longitude']
             _input = process_data(input_data=[data["magnitude"], data["depth"], data["latitude"], data["longitude"]])
             record.tsunami = predict_tsunami([_input])
+            addition_info = get_additional_info(record.latitude, record.longitude)
+            record.nearest_lat = addition_info["nearest_lat"]
+            record.nearest_lng = addition_info["nearest_lng"]
+            record.location = addition_info["location"]
+            record.distance = addition_info["distance"]
+            record.speed = addition_info["speed"]
             record.save()
             if record.tsunami:
                 return JsonResponse({'status': 'success', 'result': 'True', 'description': 'This is a tsunamigenic earthquake.'})

@@ -27,13 +27,23 @@ def find_longitude(dataset, lng):
 
 
 def find_distance(lat, lng, reg):
+	dataset = get_dataset(lat, reg)
+	lat = find_latitude(dataset, lat)
+	dataset = dataset[dataset[:, 1] == lat]
+	lng = find_longitude(dataset, lng)
+	return dataset[dataset[:, 0] == lng][0][2]
+
+
+def get_dataset(lat, reg):
 	if int(reg) == 1:
 		df = pd.read_csv(os.path.dirname(os.path.abspath(__file__)) + "/../land_latitudes/{}.csv".format(int(lat)), sep='\t')
 	elif int(reg) == 0:
 		df = pd.read_csv(os.path.dirname(os.path.abspath(__file__)) + "/../sea_latitudes/{}.csv".format(int(lat)), sep='\t')
-	dataset = df.as_matrix()
+	return df.as_matrix()
+
+def get_nearest_lat_lng(lat, lng, reg):
+	dataset = get_dataset(lat, reg)
 	lat = find_latitude(dataset, lat)
 	dataset = dataset[dataset[:, 1] == lat]
 	lng = find_longitude(dataset, lng)
-	result = dataset[dataset[:, 0] == lng][0][2]
-	return result
+	return [lat, lng]

@@ -1,9 +1,14 @@
 import sys
 import os
 import pandas as pd
+import math
+import requests
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from region_generator import generate_region
+from region_generator import get_elevation
 from distance_generator import generate_distance
+from distance_generator import find_distance
+from search_distance import get_nearest_lat_lng
 
 
 def process_data(input_file = None, input_data = None):
@@ -22,7 +27,29 @@ def process_data(input_file = None, input_data = None):
         return output_data
 
 
+def get_additional_info(lat, lng):
+    additional_info = {}
+    region = generate_region(lat=lat, lng=lng)
+    nearest_lat_lng = get_nearest_lat_lng(lat=lat, lng=lng, reg=region)
+    additional_info["nearest_lat"] = nearest_lat_lng[0]
+    additional_info["nearest_lng"] = nearest_lat_lng[1]
+    additional_info["distance"] = round(abs(find_distance(lat=lat, lng=lng, reg=region)), 2)
+    additional_info["location"] = get_location(lat=additional_info["nearest_lat"], lng=additional_info["nearest_lng"])
+    elevation = get_elevation(lat=lat, lng=lng)
+    if elevation < 0:
+        additional_info["speed"] = str(round(math.sqrt(9.81 * abs(elevation)) * 3.6, 2))
+    else:
+        additional_info["speed"] = "NA"
+    return additional_info
 
+def get_location(lat, lng):
+    url = 'https://maps.googleapis.com/maps/api/geocode/json'
+    params = {"latlng": "{}, {}".format(float(lat), float(lng)), "sensor": "true", "key": "AIzaSyBv4lMhBkh4Sk8MjjMy9cmSC8XFX0v-Zio"}
+    api_result = requests.get(url, params=params).json()
+    if api_result["results"] != []:
+        return api_result["results"][0]["formatted_address"]
+    else:
+        return "Location unavailable."
 
 
 
