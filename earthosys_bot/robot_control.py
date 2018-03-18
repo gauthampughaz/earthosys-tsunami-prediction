@@ -3,11 +3,11 @@ from ubidots import ApiClient
 import time
 
 
-AUTH_TOKEN = "A1E-UsywjfLkee7rmtKzWqIzCdUHE9n7YH"
-BASE_URL = "https://things.ubidots.com/api/v1.6/"
-POWER_ID = "5aa574bac03f976ead63ac3a"
-LEFT_WHEEL_ID = "5a961dddc03f972cb843c63b"
-RIGHT_WHEEL_ID = "5a9622b6c03f972f9cb5dfa5"
+AUTH_TOKEN = "A1E-Jzxt1BSuMNBTwfRcKt0swcS5pJY2FP"
+BASE_URL = "http://things.ubidots.com/api/v1.6/"
+POWER_ID = "5aae4046c03f97238ee514ca"
+LEFT_WHEEL_ID = "5aae46adc03f972b024d1baa"
+RIGHT_WHEEL_ID = "5aae46b8c03f972ae356b489"
 
 left_wheel, right_wheel, power = None, None, None
 
@@ -51,6 +51,7 @@ def activate():
             GPIO.output(5, GPIO.HIGH)
             GPIO.output(6, GPIO.HIGH)
             _left_wheel, _right_wheel = get_wheels_control()
+            print(_left_wheel, _right_wheel)
             if _left_wheel == 1:
                 # Moving left wheel in forward direction
                 GPIO.output(27, GPIO.HIGH)  # Left motor turns clockwise
@@ -67,13 +68,14 @@ def activate():
                 # Moving right wheel in forward direction
                 GPIO.output(4, GPIO.LOW)  # Right motor turns clockwise
                 GPIO.output(17, GPIO.HIGH)
-            time.sleep(2)
-            #if _left_wheel == -1 or _right_wheel == -1:
+            if _right_wheel == -1:
             # Motor stop/brake
-            GPIO.output(4, GPIO.LOW)
-            GPIO.output(17, GPIO.LOW)
-            GPIO.output(27, GPIO.LOW)
-            GPIO.output(22, GPIO.LOW)
+                GPIO.output(4, GPIO.LOW)
+                GPIO.output(17, GPIO.LOW)
+
+            if _left_wheel == -1:
+                GPIO.output(27, GPIO.LOW)
+                GPIO.output(22, GPIO.LOW)
 
             _power = get_power()
             if _power == 0:  # To deactivate the robot

@@ -12,6 +12,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../../earthosys_m
 from data_processor import process_data
 from data_processor import get_additional_info
 from tsunami_predictor import predict_tsunami
+from feed_analyser import alert_bot
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -28,6 +29,8 @@ class PredictTsunamiView(View):
             record.longitude = data['longitude']
             _input = process_data(input_data=[data["magnitude"], data["depth"], data["latitude"], data["longitude"]])
             record.tsunami = predict_tsunami([_input])
+            if record.tsunami:
+                alert_bot()
             addition_info = get_additional_info(record.latitude, record.longitude)
             record.nearest_lat = addition_info["nearest_lat"]
             record.nearest_lng = addition_info["nearest_lng"]
