@@ -12,7 +12,7 @@ db_file = os.path.dirname(os.path.abspath(__file__)) + "/../../earthosys_site/db
 
 AUTH_TOKEN = "A1E-Jzxt1BSuMNBTwfRcKt0swcS5pJY2FP"
 BASE_URL = "http://things.ubidots.com/api/v1.6/"
-TSUNAMI_ID = ""
+TSUNAMI_ID = "5aae46c0c03f972c1f33077b"
 
 tsunami_alert = None
 

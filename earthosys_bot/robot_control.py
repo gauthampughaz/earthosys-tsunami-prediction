@@ -1,6 +1,5 @@
 import RPi.GPIO as GPIO
 from ubidots import ApiClient
-import time
 
 
 AUTH_TOKEN = "A1E-Jzxt1BSuMNBTwfRcKt0swcS5pJY2FP"
@@ -85,7 +84,6 @@ def activate():
                 GPIO.output(17, GPIO.LOW)
                 GPIO.output(27, GPIO.LOW)
                 GPIO.output(22, GPIO.LOW)
-                time.sleep(2)
 
 
 if __name__ == "__main__":
