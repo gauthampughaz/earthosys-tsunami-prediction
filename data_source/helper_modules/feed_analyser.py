@@ -10,17 +10,6 @@ from data_processor import get_additional_info
 
 db_file = os.path.dirname(os.path.abspath(__file__)) + "/../../earthosys_site/db.sqlite3"
 
-AUTH_TOKEN = "A1E-Jzxt1BSuMNBTwfRcKt0swcS5pJY2FP"
-BASE_URL = "http://things.ubidots.com/api/v1.6/"
-TSUNAMI_ID = "5aae46c0c03f972c1f33077b"
-
-tsunami_alert = None
-
-def init():
-    global tsunami_alert, AUTH_TOKEN, BASE_URL, TSUNAMI_ID
-    api = ApiClient(token=AUTH_TOKEN, base_url=BASE_URL)
-    tsunami_alert = api.get_variable(TSUNAMI_ID)
-
 
 def get_feeds():
     init()
@@ -41,20 +30,11 @@ def get_feeds():
                     lat, lng = data[2], data[3]
                     additional_info = get_additional_info(lat, lng)
                     try:
-                        alert_bot()
+                        if tsunami:
+                            alert_bot()
                         log_data(data, region, tsunami, additional_info)
                     except Exception as e:
                         print(e)
-
-
-def alert_bot():
-    try:
-        _val = tsunami_alert.save_value({"value": 1})
-        while _val == 0:
-            _val = tsunami_alert.get_values(1)[0]["value"]
-        print("Alerted")
-    except Exception as e:
-        print("Not alerted due to error {}".format(e))
 
 
 def get_ids(feeds):
@@ -89,4 +69,5 @@ def create_connection():
     return connection
 
 if __name__ == "__main__":
+    init()
     get_feeds()

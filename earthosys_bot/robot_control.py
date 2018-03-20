@@ -44,11 +44,11 @@ async def get_bot_action():
 
 async def activate():
     while True:
-        _power = await get_power()
+        _power = int(await get_power())
         while _power == 1:
             GPIO.output(5, GPIO.HIGH)
             GPIO.output(6, GPIO.HIGH)
-            _bot_action = await get_bot_action()
+            _bot_action = int(await get_bot_action())
             print(_bot_action)
             if _bot_action == 1:
                 # Moving right wheel in forward direction
@@ -85,7 +85,7 @@ async def activate():
                 GPIO.output(27, GPIO.LOW)
                 GPIO.output(22, GPIO.LOW)
 
-            _power = await get_power()
+            _power = int(await get_power())
             if _power == 0:  # To deactivate the robot
                 GPIO.output(5, GPIO.HIGH)
                 GPIO.output(6, GPIO.HIGH)

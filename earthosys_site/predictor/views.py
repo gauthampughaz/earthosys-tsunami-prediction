@@ -12,7 +12,8 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../../earthosys_m
 from data_processor import process_data
 from data_processor import get_additional_info
 from tsunami_predictor import predict_tsunami
-from feed_analyser import alert_bot
+from data_processor import alert_bot
+from feeds.serializers import PredictorSerializer
 
 
 @method_decorator(csrf_exempt, name='dispatch')

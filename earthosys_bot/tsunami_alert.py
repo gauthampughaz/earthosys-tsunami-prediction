@@ -7,7 +7,6 @@ BASE_URL = "http://things.ubidots.com/api/v1.6/"
 TSUNAMI_ID = "5aae46c0c03f972c1f33077b"
 ALERT_MESSAGE = "A tsunamigenic earthquake is approaching us, please turn to safer place."
 FILE_NAME = "./alert.mp3"
-FILE_NAME = "./alert.mp3"
 LANGUAGE = "en-au"
 
 tsunami_alert = None
@@ -24,7 +23,7 @@ def init():
 
 def alert_daemon():
     while True:
-        _val = tsunami_alert.get_values(1)[0]["value"]
+        _val = int(tsunami_alert.get_values(1)[0]["value"])
         if _val == 1:
             os.system("mpg123 " + FILE_NAME)
             tsunami_alert.save_value({"value": 0})

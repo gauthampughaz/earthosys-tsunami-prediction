@@ -9,7 +9,13 @@ from region_generator import get_elevation
 from distance_generator import generate_distance
 from distance_generator import find_distance
 from search_distance import get_nearest_lat_lng
+from ubidots import ApiClient
 
+AUTH_TOKEN = "A1E-Jzxt1BSuMNBTwfRcKt0swcS5pJY2FP"
+BASE_URL = "http://things.ubidots.com/api/v1.6/"
+TSUNAMI_ID = "5aae46c0c03f972c1f33077b"
+
+tsunami_alert = None
 
 def process_data(input_file = None, input_data = None):
     if input_file is not None:
@@ -51,10 +57,22 @@ def get_location(lat, lng):
     else:
         return "Location unavailable."
 
+def init():
+    global tsunami_alert, AUTH_TOKEN, BASE_URL, TSUNAMI_ID
+    api = ApiClient(token=AUTH_TOKEN, base_url=BASE_URL)
+    tsunami_alert = api.get_variable(TSUNAMI_ID)
 
 
-
-
+def alert_bot():
+    init()
+    global tsunami_alert
+    try:
+        _val = tsunami_alert.save_value({"value": 1})
+        while _val == 0:
+            _val = tsunami_alert.get_values(1)[0]["value"]
+        print("Alerted")
+    except Exception as e:
+        print("Not alerted due to error {}".format(e))
 
 
 
