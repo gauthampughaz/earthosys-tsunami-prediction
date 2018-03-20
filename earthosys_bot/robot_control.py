@@ -1,22 +1,21 @@
 import RPi.GPIO as GPIO
+import asyncio
 from ubidots import ApiClient
 
 
 AUTH_TOKEN = "A1E-Jzxt1BSuMNBTwfRcKt0swcS5pJY2FP"
 BASE_URL = "http://things.ubidots.com/api/v1.6/"
 POWER_ID = "5aae4046c03f97238ee514ca"
-LEFT_WHEEL_ID = "5aae46adc03f972b024d1baa"
-RIGHT_WHEEL_ID = "5aae46b8c03f972ae356b489"
+BOT_ACTION = "5ab1045cc03f972533944dd7"
 
-left_wheel, right_wheel, power = None, None, None
+bot_action, power = None, None
 
 
 def init():
-    global left_wheel, right_wheel, power, AUTH_TOKEN, BASE_URL, LEFT_WHEEL_ID, RIGHT_WHEEL_ID, POWER_ID
+    global bot_action, power, AUTH_TOKEN, BASE_URL, BOT_ACTION, POWER_ID
     api = ApiClient(token=AUTH_TOKEN, base_url=BASE_URL)
 
-    left_wheel = api.get_variable(LEFT_WHEEL_ID)
-    right_wheel = api.get_variable(RIGHT_WHEEL_ID)
+    bot_action = api.get_variable(BOT_ACTION)
     power = api.get_variable(POWER_ID)
 
     GPIO.setwarnings(False)
@@ -35,48 +34,58 @@ def init():
     GPIO.output(22, GPIO.LOW)
 
 
-def get_power():
+async def get_power():
     return power.get_values(1)[0]["value"]
 
 
-def get_wheels_control():
-    return left_wheel.get_values(1)[0]["value"], right_wheel.get_values(1)[0]["value"]
+async def get_bot_action():
+    return bot_action.get_values(1)[0]["value"]
 
 
-def activate():
+async def activate():
     while True:
-        _power = get_power()
+        _power = await get_power()
         while _power == 1:
             GPIO.output(5, GPIO.HIGH)
             GPIO.output(6, GPIO.HIGH)
-            _left_wheel, _right_wheel = get_wheels_control()
-            print(_left_wheel, _right_wheel)
-            if _left_wheel == 1:
-                # Moving left wheel in forward direction
-                GPIO.output(27, GPIO.HIGH)  # Left motor turns clockwise
-                GPIO.output(22, GPIO.LOW)
-            elif _left_wheel == 0:
-                # Moving left wheel in backward direction
-                GPIO.output(27, GPIO.LOW)  # Left motor turns anti-clockwise
-                GPIO.output(22, GPIO.HIGH)
-            if _right_wheel == 0:
-                # Moving right wheel in backward direction
-                GPIO.output(4, GPIO.HIGH)  # Right motor turns anti-clockwise
-                GPIO.output(17, GPIO.LOW)
-            elif _right_wheel == 1:
+            _bot_action = await get_bot_action()
+            print(_bot_action)
+            if _bot_action == 1:
                 # Moving right wheel in forward direction
                 GPIO.output(4, GPIO.LOW)  # Right motor turns clockwise
                 GPIO.output(17, GPIO.HIGH)
-            if _right_wheel == -1:
-            # Motor stop/brake
+                # Moving left wheel in forward direction
+                GPIO.output(27, GPIO.HIGH)  # Left motor turns clockwise
+                GPIO.output(22, GPIO.LOW)
+            elif _bot_action == 2:
+                # Moving left wheel in forward direction
+                GPIO.output(27, GPIO.HIGH)  # Left motor turns clockwise
+                GPIO.output(22, GPIO.LOW)
+                # Motor stop/brake
                 GPIO.output(4, GPIO.LOW)
                 GPIO.output(17, GPIO.LOW)
-
-            if _left_wheel == -1:
+            elif _bot_action == 3:
+                # Moving left wheel in backward direction
+                GPIO.output(27, GPIO.LOW)  # Left motor turns anti-clockwise
+                GPIO.output(22, GPIO.HIGH)
+                # Moving right wheel in backward direction
+                GPIO.output(4, GPIO.HIGH)  # Right motor turns anti-clockwise
+                GPIO.output(17, GPIO.LOW)
+            elif _bot_action == 4:
+                # Moving right wheel in forward direction
+                GPIO.output(4, GPIO.LOW)  # Right motor turns clockwise
+                GPIO.output(17, GPIO.HIGH)
+                # Stopping left wheel
+                GPIO.output(27, GPIO.LOW)
+                GPIO.output(22, GPIO.LOW)
+            elif _bot_action == -1:
+                # Motor stop/brake
+                GPIO.output(4, GPIO.LOW)
+                GPIO.output(17, GPIO.LOW)
                 GPIO.output(27, GPIO.LOW)
                 GPIO.output(22, GPIO.LOW)
 
-            _power = get_power()
+            _power = await get_power()
             if _power == 0:  # To deactivate the robot
                 GPIO.output(5, GPIO.HIGH)
                 GPIO.output(6, GPIO.HIGH)
@@ -88,4 +97,7 @@ def activate():
 
 if __name__ == "__main__":
     init()
-    activate()
+    event_loop = asyncio.get_event_loop()
+    tasks = [activate(), get_power(), get_bot_action()]
+    event_loop.run_until_complete(asyncio.gather(*tasks))
+    event_loop.close()
