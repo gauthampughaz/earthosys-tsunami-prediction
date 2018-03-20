@@ -5,8 +5,11 @@ from .serializers import PredictorSerializer
 from .serializers import FeedsSerializer
 from predictor.models import PredictorRecord
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+import json
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class FeedsView(View):
     def get(self, request):
         feeds, records, counter = {}, {}, 0
@@ -24,9 +27,10 @@ class FeedsView(View):
         return JsonResponse({'feeds': feeds_serializer.data, 'records': predictor_serializer.data})
 
     def post(self, request):
-        draw = request.POST['draw']
-        start = int(request.POST['start'])
-        length = int(request.POST['length'])
+        json_data = json.loads(request.body.decode("utf-8"))
+        draw = json_data['draw']
+        start = int(json_data['start'])
+        length = int(json_data['length'])
         predicted_feeds = FeedPrediction.objects.all().order_by('-id')[start: start + length].values()
         feeds_serializer = FeedsSerializer(predicted_feeds, many=True)
 
