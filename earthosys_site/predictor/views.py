@@ -13,7 +13,6 @@ from data_processor import process_data
 from data_processor import get_additional_info
 from tsunami_predictor import predict_tsunami
 from data_processor import alert_bot
-from feeds.serializers import PredictorSerializer
 
 
 @method_decorator(csrf_exempt, name='dispatch')

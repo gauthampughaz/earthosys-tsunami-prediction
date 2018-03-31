@@ -12,7 +12,6 @@ db_file = os.path.dirname(os.path.abspath(__file__)) + "/../../earthosys_site/db
 
 
 def get_feeds():
-    init()
     id_buffer, feeds_id = set(), set()
     while True:
         feeds = QuakeFeed("2.5", "day")
@@ -69,5 +68,4 @@ def create_connection():
     return connection
 
 if __name__ == "__main__":
-    init()
     get_feeds()

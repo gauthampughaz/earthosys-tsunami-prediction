@@ -21,14 +21,15 @@ def init():
     tts_message.save(FILE_NAME)
 
 
-def alert_daemon():
-    while True:
-        _val = int(tsunami_alert.get_values(1)[0]["value"])
-        if _val == 1:
-            os.system("mpg123 " + FILE_NAME)
-            tsunami_alert.save_value({"value": 0})
+def check_tsunami_status():
+    _val = int(tsunami_alert.get_values(1)[0]["value"])
+    print(_val)
+
+    if _val == 1:
+        os.system("mpg123 " + FILE_NAME)
+        tsunami_alert.save_value({"value": 0})
+
 
 
 if __name__ == "__main__":
     init()
-    alert_daemon()
