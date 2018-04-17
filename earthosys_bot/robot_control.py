@@ -11,11 +11,11 @@ POWER_ID = "5aae4046c03f97238ee514ca"
 BOT_ACTION = "5ab1045cc03f972533944dd7"
 TSUNAMI_ID = "5aae46c0c03f972c1f33077b"
 ALERT_MESSAGE = "A tsunamigenic earthquake is approaching us, please turn to safer place."
-FILE_NAME = "./alert.mp3"
+FILE_NAME = "alert.mp3"
 LANGUAGE = "en-au"
 
 bot_action, power = None, None
-tsunami_alert = None
+tsunami_alert, datasource = None, None
 
 
 def init():
@@ -64,6 +64,7 @@ async def activate():
                 GPIO.output(5, GPIO.HIGH)
                 GPIO.output(6, GPIO.HIGH)
                 _bot_action = int(await get_bot_action())
+                print(_bot_action)
                 if _bot_action == 1:
                     # Moving right wheel in forward direction
                     GPIO.output(4, GPIO.LOW)  # Right motor turns clockwise
@@ -112,18 +113,10 @@ async def activate():
             print("Cloud error {}".format(e))
 
 
-async def alert_daemon():
-    while True:
-        _val = int(await tsunami_alert.get_values(1)[0]["value"])
-        if _val == 1:
-            os.system("mpg123 " + FILE_NAME)
-            tsunami_alert.save_value({"value": 0})
-
-
 async def check_tsunami_status():
     _val = int(tsunami_alert.get_values(1)[0]["value"])
-
     if _val == 1:
+        print("tsunami")
         os.system("mpg123 " + FILE_NAME)
         tsunami_alert.save_value({"value": 0})
 
@@ -131,6 +124,6 @@ async def check_tsunami_status():
 if __name__ == "__main__":
     init()
     event_loop = asyncio.get_event_loop()
-    tasks = [activate(), check_tsunami_status()]
+    tasks = [activate()]
     event_loop.run_until_complete(asyncio.gather(*tasks))
     event_loop.close()

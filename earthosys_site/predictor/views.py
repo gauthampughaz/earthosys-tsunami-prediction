@@ -29,8 +29,6 @@ class PredictTsunamiView(View):
             record.longitude = data['longitude']
             _input = process_data(input_data=[data["magnitude"], data["depth"], data["latitude"], data["longitude"]])
             record.tsunami = predict_tsunami([_input])
-            if record.tsunami:
-                alert_bot()
             addition_info = get_additional_info(record.latitude, record.longitude)
             record.nearest_lat = addition_info["nearest_lat"]
             record.nearest_lng = addition_info["nearest_lng"]
@@ -39,6 +37,7 @@ class PredictTsunamiView(View):
             record.speed = addition_info["speed"]
             record.save()
             if record.tsunami:
+                alert_bot()
                 return JsonResponse({'status': 'success', 'result': 'True', 'description': 'This is a tsunamigenic earthquake.'})
             else:
                 return JsonResponse({'status': 'success', 'result': 'False', 'description': 'This is a non-tsunamigenic earthquake.'})

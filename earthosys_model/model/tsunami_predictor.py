@@ -19,7 +19,7 @@ Created on Fri Dec 8 14:24:47 2017
 
 Accuracy achieved so far:
 
-Random Forest Classifier : 97.49
+Random Forest Classifier : 97.99
 
 """
 
@@ -27,6 +27,8 @@ import pandas as pd
 import numpy as np
 import os
 from sklearn.model_selection import train_test_split
+from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import ShuffleSplit
 from sklearn.decomposition import PCA
 from sklearn.externals import joblib
 from sklearn.svm import LinearSVC
@@ -38,6 +40,19 @@ import matplotlib.pyplot as plt
 
 
 file_name = os.path.dirname(os.path.abspath(__file__)) + "/model.pkl"
+
+
+def plot_graph(df, legend_1, legend_2):
+	postives = df.loc[df["class"] == 1]
+	negatives = df.loc[df["class"] == 0]
+	figure = plt.figure()
+	plt.xlabel(legend_1[1])
+	plt.ylabel(legend_2[1])
+	plt.plot(postives.iloc[:, legend_1[0]], postives.iloc[:, legend_2[0]], 'ro', label="Tsunamigenic")
+	plt.plot(negatives.iloc[:, legend_1[0]], negatives.iloc[:, legend_2[0]], 'bo', label="Non-Tsunamigenic")
+	plt.legend(loc="best")
+	figure.savefig(legend_1[2] + "_vs_" + legend_2[2] + ".svg", format='svg', dpi=1200)
+	plt.show()	
 
 
 def features_relationship(df, array):
@@ -56,7 +71,7 @@ def features_relationship(df, array):
 				y += 1
 		x += 1
 	figManager = plt.get_current_fig_manager()
-	figManager.window.showMaximized()
+	#figManager.window.showMaximized()
 	plt.show()
 
 
@@ -95,6 +110,14 @@ def test_model(features):
 	except:
 		print('Please train the model...')
 
+def get_cv_score(X, y):
+	try:
+		clf = joblib.load(file_name)
+		cv = ShuffleSplit(n_splits=5, test_size=0.30, random_state=50)
+		return cross_val_score(clf, X, y, cv=cv)
+	except:
+		print('Please train the model...')
+
 def find_score(pred_values, actual_values):
 	return accuracy_score(pred_values, actual_values)
 
@@ -110,18 +133,25 @@ def predict_tsunami(features):
 
 if __name__ == '__main__':
 	labels =  ['magnitude', 'focal_depth', 'region', 'distance', 'class']
-	df = pd.read_csv(os.path.dirname(os.path.abspath(__file__)) + "../dataset/dataset_final_v7.csv", names=labels)
+	df = pd.read_csv(os.path.dirname(os.path.abspath(__file__)) + "/../dataset/dataset_final_v7.csv", names=labels)
 	dataset = df.as_matrix()
 
 	# View relationship between featuers
 	#features_relationship(df, dataset)
+
+	# View individual plot
+	#plot_graph(df, [0, "Magnitude (Richter Scale)", "magnitude"], [1, "Focal depth (Km)", "depth"])
+	#plot_graph(df, [0, "Magnitude (Richter Scale)", "magnitude"], [3, "Distance from nearest coastal point (Km)", "distance"])
+	#plot_graph(df, [0, "Magnitude (Richter Scale)", "magnitude"], [2, "Region of epicenter (Land - 1 / Sea - 0)", "region"])
+	#plot_graph(df, [1, "Focal depth (Km)", "depth"], [2, "Region of epicenter (Land - 1 / Sea - 0)", "region"])
+	#plot_graph(df, [1, "Focal depth (Km)", "depth"], [3, "Distance from nearest coastal point (Km)", "distance"])
 
 	# Split dataset
 	X, y = target_feature_split(dataset)
 	features_train, features_test, labels_train, labels_test = split_dataset(X, y)
 
 	# Dimensional Reduction
-	dimensional_reduction(X, y)
+	#dimensional_reduction(X, y)
 
 	# Training the model
 	train_model(features_train, labels_train)
@@ -133,10 +163,14 @@ if __name__ == '__main__':
 	score = find_score(pred, labels_test)
 
 	# Confusion matrix
-	print(confusion_matrix(labels_test, pred))
+	print(confusion_matrix(labels_test, pred, labels=[1,0]))
 
 	# Classification report
 	print(classification_report(labels_test, pred, target_names=['class 0', 'class 1']))
 
 	# Score
 	print('Score : {}'.format(round(score * 100, 2)))
+
+	# CV Score
+	cv_score = get_cv_score(X, y)
+	print('Score : {} (+/- {})'.format(round(cv_score.mean(), 2), round(cv_score.std(), 2)))
