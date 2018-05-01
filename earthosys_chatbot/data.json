@@ -60,7 +60,7 @@
 	{
           "class": "machine_learing",
           "sentences": ["Why you are using machine learing?", "Which algorithm you are using?"],
-          "responses": ["Machine Learing gives more accuracy than others. I'm using Random Forest Classification to predict the Tsunami. This will give 99 percent of accuracy."]
+          "responses": ["Machine Learing gives more accuracy than others. I'm using Random Forest Classification to predict the Tsunami. This will give 97 percent of accuracy."]
         },
 	{
           "class": "sources",
@@ -143,7 +143,7 @@
         },
         { "class": "largest_tsunami",
           "sentences": ["What is the deadliest tsunami in recorded history?","when was the worlds largest tsunami occured?","Can you tell me the worlds largest tsunami?","which tsunami was the most destructive"],
-          "responses": ["“It still affects me most days,” Dec. 26, 2004, Indian Ocean Tsunami survivor Dwayne Meadows said. The 2004 Indian Ocean Tsunami is the deadliest tsunami in recorded history, and it caused an estimated $14 billion in damages at the tim"]
+          "responses": ["“It still affects me most days,” Dec. 26, 2004, Indian Ocean Tsunami survivor Dwayne Meadows said. The 2004 Indian Ocean Tsunami is the deadliest tsunami in recorded history, and it caused an estimated $14 billion in damages at the time"]
         },
         { "class": "speed_tsunami",
           "sentences": ["How fast can a tsunami can go?","How fast does the tsunami can move?","what is the speed of the tsunami?"],

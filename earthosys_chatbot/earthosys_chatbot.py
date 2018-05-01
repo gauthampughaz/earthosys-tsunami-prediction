@@ -50,7 +50,7 @@ def sigmoid_to_derivative(output):
 
 
 # Train the Artificial Neural Network.
-def train(X, y, hidden_neurons=30, alpha=0.01, epochs=1000000):
+def train(X, y, hidden_neurons=35, alpha=0.01, epochs=10000000):
     print ("Training with {0} neurons, alpha: {1}".format(hidden_neurons, str(alpha)))
     print ("Input matrix: {}x{}    Output matrix: {}x{}".format(len(X),len(X[0]),1, len(classes)))
 
@@ -279,7 +279,7 @@ if __name__ == '__main__':
     if(change_in_data(len(X), len(X[0]))):
         # Training the ANN.
         start_time = time.time()
-        train(X, y, hidden_neurons=40, alpha=0.1, epochs=1000000)
+        train(X, y, hidden_neurons=35, alpha=0.01, epochs=2000000)
         elapsed_time = time.time() - start_time
         print ("Training time: ", elapsed_time, "seconds")
 
